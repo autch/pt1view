@@ -1,0 +1,21 @@
+table { border: 1px solid black; padding: 0; margin-bottom: 1em; }
+td { padding: 2px; border: none; border: 1px solid #ccc; }
+
+.time { font-size: 80%; }
+.description { font-size: 80%; }
+
+.pid { font-size: 80%; }
+.args { font-family: monospace; }
+
+.command { border: double; background: #ddf;
+	   padding: 2px; margin-bottom: 1em; }
+
+.selected { background: #dfd; }
+.errors { border: double; background: #fdd;
+	  padding: 2px; margin-bottom: 1em; }
+
+.inline { display: inline; }
+
+th { background: #888; color: #fff; text-align: left; padding: 2px;}
+
+tr { border-bottom: 1px solid #000; margin-bottom: 8px; }
