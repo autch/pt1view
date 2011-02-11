@@ -40,7 +40,7 @@ function build_recpt1_for_tcp($pt1)
 
 function find_recpt1_process()
 {
-  $cmd = sprintf("ps -C recpt1 -o ruser=,pid=,ppid=,args=");
+  $cmd = sprintf("LANG=ja_JP.UTF-8 ps -C recpt1 -o ruser=,pid=,ppid=,args=");
   $output = shell_exec($cmd);
   $lines = explode("\n", $output);
 
@@ -59,7 +59,7 @@ function find_recpt1_process()
 
 function find_tsserv_process($recpt1_proc)
 {
-  $cmd = sprintf("ps -C tsserv -o ruser=,pid=,ppid=,args=");
+  $cmd = sprintf("LANG=ja_JP.UTF-8 ps -C tsserv -o ruser=,pid=,ppid=,args=");
   $output = shell_exec($cmd);
   $lines = explode("\n", $output);
 
