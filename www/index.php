@@ -26,7 +26,7 @@ if(!empty($_POST))
     if(empty($_POST['b25'])) $pt1['b25'] = FALSE;
     if(empty($_POST['strip'])) $pt1['strip'] = FALSE;
       
-    if(!preg_match('/^(192\.168\.0\.)|(127\.)/', $pt1['addr']))
+    if(!preg_match('/^(192\.168\.0\.)|(127\.)|(224\.)/', $pt1['addr']))
     {
       $errors[] = "リモートアドレスがローカルサブネット内にありません。ストリーミングを拒否します。";
     }

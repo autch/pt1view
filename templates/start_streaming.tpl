@@ -1,4 +1,3 @@
-<form method="post" action="">
 <table cellpadding="0" cellspacing="1">
   <tr><th colspan="4">新規ストリーミング</th></tr>
   <tr><th>PT1/2 デバイス</th>

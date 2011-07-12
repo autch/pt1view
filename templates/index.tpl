@@ -10,9 +10,8 @@ function setPhysChannel(ch)
 
 function setHighlight(ch)
 {
-  $('tr[class*="selected"]').toggleClass('selected', false);
+  $('div[class*="selected"]').toggleClass('selected', false);
   $('#ch' + ch).toggleClass("selected", true);
-  $('#ch' + ch + '_2').toggleClass("selected", true);
 }
 
 function setChannel(ch)
@@ -53,6 +52,8 @@ function setChannel(ch)
 {/if}
 
 {include file="running_processes.tpl"}
-{include file="start_streaming.tpl"}
+<form method="post" action="">
 {include file="program_table.tpl"}
+{include file="start_streaming.tpl"}
+</form>
 {include file="footer.tpl"}
