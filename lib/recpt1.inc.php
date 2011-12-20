@@ -2,7 +2,7 @@
 
 function build_recpt1_args($pt1)
 {
-  $args = array('/usr/local/bin/recpt1');
+  $args = array(RECPT1_PATH);
   if($pt1['b25'])
     $args[] = '--b25';
   if($pt1['b25'] && $pt1['strip'])
@@ -34,7 +34,7 @@ function build_recpt1_for_tcp($pt1)
 {
   $pt1['output'] = '-';
   $cmd = build_recpt1_args($pt1);
-  $sh_cmd = sprintf("/usr/local/bin/tsserv -p %d -- %s", $pt1['tcp_port'], $cmd);
+  $sh_cmd = sprintf("%s -p %d -- %s", TSSERV_PATH, $pt1['tcp_port'], $cmd);
   return $sh_cmd;
 }
 

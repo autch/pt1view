@@ -82,7 +82,7 @@ if(!empty($_POST))
     {
       if($proc['pid'] === $target_pid)
       {
-        $cmd = sprintf("/usr/local/bin/recpt1ctl --pid %d --channel %d", intval($proc['pid']), intval($ch));
+        $cmd = sprintf("%s --pid %d --channel %d", RECPT1CTL_PATH, intval($proc['pid']), intval($ch));
         $sh_cmd = sprintf("sh -c '%s >/dev/null 2>&1 &'", $cmd);
         $command[] = $sh_cmd;
         system($sh_cmd);
