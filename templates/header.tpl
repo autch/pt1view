@@ -6,7 +6,7 @@
 <title>pt1view</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" type="text/css" href="pt1view.css"/>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
 <style type="text/css">{literal}
 {/literal}</style>
 </head>
