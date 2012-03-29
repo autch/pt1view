@@ -1,48 +1,48 @@
 {include file="header.tpl"}
-<script type="text/javascript">{literal}
-function setPhysChannel(ch)
-{
-  var sel = $('#phys_channel');
-  var pch = $('#phys_channel option[value="' + ch +  '"]');
 
-  if(pch) sel.attr('value', pch.attr('value'));
-}
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </a>
 
-function setHighlight(ch)
-{
-  $('div[class*="selected"]').toggleClass('selected', false);
-  $('#ch' + ch).toggleClass("selected", true);
-}
+      <a class="brand" href="?">pt1view</a>
 
-function setChannel(ch)
-{
-  $('#ch').attr('value', ch).toggleClass('selected', true);
-  $('text,[name="ch"]').attr('value', ch).toggleClass('selected', true);
+      <div class="nav-collapse">
+	<form class="navbar-form pull-right" action="">
+	  {html_options name="phys_channel" class="phys_channel" id="phys_channel2"
+	  options=$phys_channels onchange="setChannel($(this).attr('value'))"}
 
-  setPhysChannel(ch);
-  setHighlight(ch);
-}
+	  <button class="btn" onclick="setChannel('{$ch.channel}');$('#tcp').click();">TCP</button>
+	  <button class="btn" onclick="setChannel('{$ch.channel}');$('#udp').click();">UDP</button>
 
-{/literal}</script>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
 
-<div><a href="?">更新</a></div>
-
-<div/>
+<div class="container">
 
 {if !empty($command)}
-<div class="command" id="command">
-以下のコマンドを実行：<button onclick="$('#command').hide(200);">隠す</button><br/>
-<pre>
+<div class="alert alert-success fade in" id="command">
+<a class="close" data-dismiss="alert">&times;</a>
+<strogn>コマンドを実行：</strong>
+<code>
 {foreach from=$command item=cmd}
 {$cmd|escape}
 {/foreach}
-</pre>
+</code>
 </div>
 {/if}
 
 {if !empty($errors)}
-<div class="errors" id="errors">
-以下のエラーが発生：<button onclick="$('#errors').hide(200);">隠す</button>
+<div class="alert alert-block alert-error fade in" id="errors">
+<a class="close" data-dismiss="alert">&times;</a>
+<h4 class="alert-heading">エラー</h4>
 <ul>
 {foreach from=$errors item=error}
 <li>{$error|escape}</li>
@@ -52,8 +52,9 @@ function setChannel(ch)
 {/if}
 
 {include file="running_processes.tpl"}
-<form method="post" action="">
 {include file="program_table.tpl"}
 {include file="start_streaming.tpl"}
-</form>
+
+</div>
+
 {include file="footer.tpl"}

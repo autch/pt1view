@@ -1,0 +1,17 @@
+/* running commands */
+.pid { }
+.args { font-family: monospace; }
+
+/* <button>'s */
+.inline { display: inline; }
+
+/* for program table */
+
+.ch { /*font-size: 10pt;*/ height: 8em; }
+.ch_desc { background: #eee; padding: 2px; font-weight: bold; }
+.title { font-weight: bold; margin: 4px 0px; }
+.time { font-weight: normal; }
+.description { }
+
+/* background-color for selected channel */
+.selected { background: #dfd; }
