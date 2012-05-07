@@ -1,8 +1,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
 
-<script src="js/libs/bootstrap/tooltip.js"></script>
-<script src="js/libs/bootstrap/popover.js"></script>
 <script src="js/libs/bootstrap/transition.js"></script>
 <script src="js/libs/bootstrap/collapse.js"></script>
 <script src="js/libs/bootstrap/dropdown.js"></script>
@@ -17,11 +15,6 @@ $('#command').alert();
 {if !empty($errors)}
 $('#errors').alert();
 {/if}
-//$('.collapse').collapse();
-$("a[rel=popover]")
-.popover()
-.click(function(e) {
-e.preventDefault()
-})</script>
+</script>
 </body>
 </html>

@@ -7,11 +7,11 @@
 
 /* for program table */
 
-.ch { /*font-size: 10pt;*/ height: 8em; }
+.ch { }
 .ch_desc { background: #eee; padding: 2px; font-weight: bold; }
 .title { font-weight: bold; margin: 4px 0px; }
 .time { font-weight: normal; }
-.description { }
+.description { margin: 2px 0px; }
 
 /* background-color for selected channel */
 .selected { background: #dfd; }
