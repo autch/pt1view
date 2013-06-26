@@ -18,32 +18,5 @@
 <link rel="stylesheet" href="css/bootstrap-responsive.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <script src="js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
-<script type="text/javascript">{literal}
-function setPhysChannel(ch)
-{
-  var pch = $('#phys_channel option[value="' + ch +  '"]');
-
-  if(pch) {
-  $('#phys_channel').attr('value', pch.attr('value'));
-  $('#phys_channel2').attr('value', pch.attr('value'));
-  }
-}
-
-function setHighlight(ch)
-{
-  $('div[class*="selected"]').toggleClass('selected', false);
-  $('#ch' + ch).toggleClass("selected", true);
-}
-
-function setChannel(ch)
-{
-  $('#ch').attr('value', ch).toggleClass('selected', true);
-  $('text,[name="ch"]').attr('value', ch).toggleClass('selected', true);
-
-  setPhysChannel(ch);
-  setHighlight(ch);
-}
-
-{/literal}</script>
 </head>
 <body>

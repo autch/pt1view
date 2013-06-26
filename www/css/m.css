@@ -1,0 +1,8 @@
+
+li#udp_peer div.ui-input-text {
+    width: 40%;
+}
+
+li#udp_peer div:nth-of-type(2) {
+    width: 20%;
+}

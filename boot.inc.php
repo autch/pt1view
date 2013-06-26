@@ -15,3 +15,4 @@ require_once 'TNSmarty.class.php';
 require_once 'Settings.class.php';
 require_once 'epgrec.inc.php';
 require_once 'recpt1.inc.php';
+require_once 'jsonp.inc.php';

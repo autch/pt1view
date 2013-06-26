@@ -17,7 +17,7 @@ function open_epgrec_db(&$settings)
 
 function select_channel_list(&$db, &$config)
 {
-  $sql = sprintf('SELECT channel_disc, channel, name FROM %1$schannelTbl ORDER BY id ASC', $config->tbl_prefix);
+  $sql = sprintf('SELECT channel_disc, channel, name FROM %1$schannelTbl ORDER BY channel ASC', $config->tbl_prefix);
   $channels = array();
 
   if(($result = $db->query($sql)) !== FALSE)

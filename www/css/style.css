@@ -5,13 +5,8 @@
 /* <button>'s */
 .inline { display: inline; }
 
-/* for program table */
-
-.ch { }
-.ch_desc { background: #eee; padding: 2px; font-weight: bold; }
-.title { font-weight: bold; margin: 4px 0px; }
-.time { font-weight: normal; }
-.description { margin: 2px 0px; }
-
 /* background-color for selected channel */
 .selected { background: #dfd; }
+
+
+.prog_desc { font-size: 85%; }
