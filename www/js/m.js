@@ -37,7 +37,12 @@ $(function() {
 		$("<p>").text(ch.description).appendTo($a_ns);
 		$("<p>").addClass("ui-li-aside").text(reltime(ch.starttime) + "-" + reltime(ch.endtime, ch.starttime)).appendTo($a_ns);
 
-		$a_ns.attr({ "href": "#new-stream", "data-channel": ch.channel}).appendTo($li);
+		$a_ns.attr({
+		    "href": "#new-stream",
+		    "data-channel": ch.channel,
+		    "data-rel": "popup",
+		    "data-position-to": "window",
+		}).appendTo($li);
 		$("<a>").attr({
 		    "href": "#program-detail",
 		    "data-channel": ch.channel,
@@ -54,10 +59,8 @@ $(function() {
     };
     loadPrograms();
     window.setTimeout(loadPrograms, 1000 * 60 * 5); // 5 minutes
+    $('#main').on("click", "a#reload-programs", function(e) { loadPrograms(); });
     
-    $("#new-stream").on("pageinit", function() {
-    });
-
     $('#program').on("click", "a[href='#program-detail']", function(e) {
 	var $self = $(e.currentTarget);
 	var ch = $self.attr("data-channel");
@@ -93,10 +96,6 @@ $(function() {
 
 	$('#ch').val(ch);
 	window.setTimeout(function() { $('#ch').selectmenu("refresh"); }, 0);
-    });
-
-    $('#new-stream').on("pagebeforeshow", function(e) {
-	$('#ch').selectmenu("refresh");
     });
 
     $('#main').on("click", "a[href='#processes']", function(e) {
@@ -160,7 +159,7 @@ $(function() {
 	}
     };
 
-    $('#main').on("click", "a[data-action='kill']", function(e) {
+    $('#processes').on("click", "a[data-action='kill']", function(e) {
 	var $self = $(e.currentTarget);
 	var pid = $self.attr("data-pid");
 	var request = { action: "kill", pid: pid };
@@ -184,7 +183,7 @@ $(function() {
 	    strip: $('#strip').val(),
 	};
 	$.getJSON("command.php", request, showCommandResult);
-	$('#new-stream').dialog("close");
+	$('#new-stream').popup("close");
 	return false;
     });
 });
