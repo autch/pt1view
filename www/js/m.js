@@ -58,7 +58,7 @@ $(function() {
 	});
     };
     loadPrograms();
-    window.setTimeout(loadPrograms, 1000 * 60 * 5); // 5 minutes
+    window.setInterval(loadPrograms, 1000 * 60 * 5); // 5 minutes
     $('#main').on("click", "a#reload-programs", function(e) { loadPrograms(); });
     
     $('#program').on("click", "a[href='#program-detail']", function(e) {
