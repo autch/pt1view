@@ -1,32 +1,18 @@
-function setPhysChannel(ch)
-{
-    var pch = $('#phys_channel option[value="' + ch +  '"]');
-    
-    if(pch) {
-	$('#phys_channel').val(pch.val());
-	$('#phys_channel2').val(pch.val());
-    }
-}
-
-function setHighlight(ch)
-{
-    $('tr[class*="selected"]').toggleClass('selected', false);
-    $('#ch' + ch).toggleClass("selected", true);
-}
-
-function setChannel(ch)
-{
-    $('#ch').val(ch).toggleClass('selected', true);
-    $('text,[name="ch"]').val(ch).toggleClass('selected', true);
-
-    setPhysChannel(ch);
-    setHighlight(ch);
-}
-
 (function() {
+    var setChannel = function(ch) {
+	$('#ch').val(ch).toggleClass('selected', true);
+	$('text,[name="ch"]').val(ch).toggleClass('selected', true);
+	
+	$('tr[class*="selected"]').toggleClass('selected', false);
+	$('#ch' + ch).toggleClass("selected", true);
+
+	$('#ch').val(ch);
+    };
+
     var updatePrograms = function() {
 	$.getJSON("programs.php", function(data, status, xhr) {
 	    var $target = $('#programs tbody');
+	    var $sel = $("#ch");
 	    var reltime = function(start, end) {
 		var from = new Date(1000 * parseInt(start));
 		var now;
@@ -43,6 +29,7 @@ function setChannel(ch)
 		return v.join("");
 	    };
 
+	    $sel.empty();
 	    $target.empty();
 	    for(var i = 0; i < data.length; i++) {
 		var item = data[i];
@@ -65,6 +52,8 @@ function setChannel(ch)
 		    "id": "ch" + item.channel,
 		    "data-ch": item.channel,
 		}).appendTo($target);
+		
+		$('<option>').attr("value", item.channel).text(item.channel_disc + ": " + item.name).appendTo($sel);
 	    }
 	});
     };
@@ -134,14 +123,6 @@ function setChannel(ch)
 	updateProcesses();
     };
 
-    jQuery.getJSON("channels.php", function(data, status, xhr) {
-	var $sel = $("#ch");
-	$sel.empty();
-	for(var ch in data) {
-	    $("<option>").attr("value", ch).text(data[ch]).appendTo($sel);
-	}
-    });
-
     $('#programs tbody').on("click", "tr", function(e) {
 	var $self = $(e.currentTarget);
 	var ch = $self.attr("data-ch");
@@ -178,7 +159,9 @@ function setChannel(ch)
 	    strip: $('#strip').val(),
 	};
 	$.getJSON("command.php", request, showCommandResult);
-//	$('#new-stream').dialog("close");
 	return false;
+    });
+    $("a[class='brand']").on("click", function(e) {
+	updatePeriodic();
     });
 })();

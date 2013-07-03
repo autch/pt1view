@@ -2,11 +2,11 @@
 
 require_once '../boot.inc.php';
 
-$proesses = find_recpt1_process();
+$proesses = RecPT1::findRecPT1();
 
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 
-$cb = get_jsonp_callback();
-echo jsonp_begin($cb);
+$jp = new JSONP();
+$jp->begin();
 echo json_encode($proesses, JSON_HEX_APOS | JSON_HEX_QUOT);
-echo jsonp_end($cb);
+$jp->end();

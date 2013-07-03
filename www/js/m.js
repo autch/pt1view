@@ -1,12 +1,4 @@
 $(function() {
-    jQuery.getJSON("channels.php", function(data, status, xhr) {
-	var $sel = $("#ch");
-	$sel.empty();
-	for(var ch in data) {
-	    $("<option>").attr("value", ch).text(data[ch]).appendTo($sel);
-	}
-    });
-
     var loadPrograms = function() {
 	var reltime = function(start, end) {
 	    var from = new Date(1000 * parseInt(start));
@@ -25,8 +17,10 @@ $(function() {
 	};
 	jQuery.getJSON("programs.php", function(data, status, xhr) {
 	    var $ul = $('#program');
+	    var $sel = $("#ch");
 
 	    $ul.empty();
+	    $sel.empty();
 	    for(var i = 0; i < data.length; i++) {
 		var $li = $("<li>");
 		var $a_ns = $("<a>");
@@ -51,7 +45,9 @@ $(function() {
 		    "data-transition": "pop"
 		}).text("番組詳細").appendTo($li);
 
-		$li.attr("id", "ch" + ch.channel).appendTo($ul);
+		$li.attr("id", "ch" + ch.channel).data("program", ch).appendTo($ul);
+
+		$('<option>').attr("value", ch.channel).text(ch.channel_disc + ": " + ch.name).appendTo($sel);
 	    }
 
 	    /*window.setTimeout(function() {*/ $ul.listview("refresh");// }, 0);
@@ -63,29 +59,24 @@ $(function() {
     
     $('#program').on("click", "a[href='#program-detail']", function(e) {
 	var $self = $(e.currentTarget);
-	var ch = $self.attr("data-channel");
+	var $li = $self.parents("li");
+	var prog = $li.data("program");
 
-	jQuery.getJSON("programs.php", function(data, status, xhr) {
-	    var prog = data.filter(function(elem, idx, arr) {
-		return elem.channel === ch;
-	    })[0];
-
-	    var $div = $('#program-detail-content');
-	    var prog_start = new Date(1000 * parseInt(prog.starttime));
-	    var prog_end = new Date(1000 * parseInt(prog.endtime));
-	    var localFormat = function(d) {
-		var v = [d.getFullYear(), "/", d.getMonth(), "/", d.getDay(), " ", 
-			 d.getHours(), ":", d.getMinutes()];
-		return v.join("");
-	    };
+	var $div = $('#program-detail-content');
+	var prog_start = new Date(1000 * parseInt(prog.starttime));
+	var prog_end = new Date(1000 * parseInt(prog.endtime));
+	var localFormat = function(d) {
+	    var v = [d.getFullYear(), "/", d.getMonth(), "/", d.getDay(), " ", 
+		     d.getHours(), ":", d.getMinutes()];
+	    return v.join("");
+	};
 	    
-	    $div.empty();
-	    $("<h4>").text(prog.title).appendTo($div);
-	    $("<div>").text(prog.channel_disc + ": " + prog.name).appendTo($div);
-	    $("<div>").text(localFormat(prog_start) + " - " + localFormat(prog_end)).appendTo($div);
-	    $("<p>").text(prog.description).appendTo($div);
-	    $("#program-detail").popup("open");
-	});
+	$div.empty();
+	$("<h4>").text(prog.title).appendTo($div);
+	$("<div>").text(prog.channel_disc + ": " + prog.name).appendTo($div);
+	$("<div>").text(localFormat(prog_start) + " - " + localFormat(prog_end)).appendTo($div);
+	$("<p>").text(prog.description).appendTo($div);
+	$("#program-detail").popup("open");
 
 	return false;
     });

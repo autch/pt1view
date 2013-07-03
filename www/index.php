@@ -2,8 +2,8 @@
 
 require_once '../boot.inc.php';
 
-$pt1 = get_default_pt1_params();
+$pt1 = RecPT1::getDefault();
 
 $smarty = new TNSmarty();
 $smarty->assign('pt1', $pt1);
-$smarty->display("index.tpl");
+$smarty->display(isset($_REQUEST['m']) ? 'm.tpl' : "index.tpl");

@@ -4,7 +4,7 @@ require_once '../boot.inc.php';
 
 if(!defined('SIGTERM')) define('SIGTERM', 15);
 
-$pt1 = get_default_pt1_params();
+$pt1 = new RecPT1();
 $command = array();
 $errors = array();
 
@@ -12,37 +12,39 @@ $action = empty($_REQUEST['action']) ? FALSE : trim($_REQUEST['action']);
 
 switch($action) {
 case 'udp':
-    if(!empty($_REQUEST['device'])) $pt1['device'] = trim($_REQUEST['device']);
-    if(!empty($_REQUEST['addr'])) $pt1['addr'] = trim($_REQUEST['addr']);
-    if(!empty($_REQUEST['port'])) $pt1['port'] = intval($_REQUEST['port']);
-    if(!empty($_REQUEST['ch'])) $pt1['ch'] = intval($_REQUEST['ch']);
-    if(empty($_REQUEST['b25'])) $pt1['b25'] = FALSE;
-    if(empty($_REQUEST['strip'])) $pt1['strip'] = FALSE;
+    $upd = array();
+    if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
+    if(!empty($_REQUEST['addr'])) $upd['addr'] = trim($_REQUEST['addr']);
+    if(!empty($_REQUEST['port'])) $upd['port'] = intval($_REQUEST['port']);
+    if(!empty($_REQUEST['ch'])) $upd['ch'] = intval($_REQUEST['ch']);
+    if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
+    if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
       
-    if(!preg_match('/^(192\.168\.0\.)|(127\.)|(224\.)/', $pt1['addr'])) {
+    if(!preg_match('/^(192\.168\.0\.)|(127\.)|(224\.)/', $upd['addr'])) {
         $errors[] = "リモートアドレスがローカルサブネット内にありません。UDPストリーミングを拒否します。";
     } else {
-        $sh_cmd = build_recpt1_for_udp($pt1);
+        $sh_cmd = $pt1->buildForUDP($upd);
         $command[] = $sh_cmd;
-        system($sh_cmd);
+        exec($sh_cmd);
     }
     break;
 case 'tcp':
-    if(!empty($_REQUEST['device'])) $pt1['device'] = trim($_REQUEST['device']);
-    if(!empty($_REQUEST['tcp_port'])) $pt1['tcp_port'] = intval($_REQUEST['tcp_port']);
-    if(!empty($_REQUEST['ch'])) $pt1['ch'] = intval($_REQUEST['ch']);
-    if(empty($_REQUEST['b25'])) $pt1['b25'] = FALSE;
-    if(empty($_REQUEST['strip'])) $pt1['strip'] = FALSE;
+    $upd = array();
+    if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
+    if(!empty($_REQUEST['tcp_port'])) $upd['tcp_port'] = intval($_REQUEST['tcp_port']);
+    if(!empty($_REQUEST['ch'])) $upd['ch'] = intval($_REQUEST['ch']);
+    if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
+    if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
           
-    $sh_cmd = build_recpt1_for_tcp($pt1);
+    $sh_cmd = $pt1->buildForTCP($upd);
     $command[] = $sh_cmd;
-    system($sh_cmd);
+    exec($sh_cmd);
     break;
 case 'kill':
     $target_pid = 0;
     if(!empty($_REQUEST['pid'])) $target_pid = intval($_REQUEST['pid']);
 
-    $processes = find_recpt1_process();
+    $processes = RecPT1::findRecPT1();
     foreach($processes as $proc) {
         if($proc['pid'] === $target_pid) {
             $command[] = sprintf("kill -SIGTERM %d", $proc['pid']);
@@ -60,13 +62,13 @@ case 'change':
     if(!empty($_REQUEST['pid'])) $target_pid = intval($_REQUEST['pid']);
     if(!empty($_REQUEST['ch'])) $ch = intval($_REQUEST['ch']);
 
-    $processes = find_recpt1_process();
+    $processes = RecPT1::findRecPT1();
     foreach($processes as $proc) {
         if($proc['pid'] === $target_pid) {
             $cmd = sprintf("%s --pid %d --channel %d", RECPT1CTL_PATH, intval($proc['pid']), intval($ch));
             $sh_cmd = sprintf("sh -c '%s >/dev/null 2>&1 &'", $cmd);
             $command[] = $sh_cmd;
-            system($sh_cmd);
+            exec($sh_cmd);
         }
     }
     break;
@@ -75,14 +77,14 @@ default:
     die("Invalid action");
 }
 
-header("Content-type: application/json");
+header("Content-type: application/json; charset=UTF-8");
 
 $result = array(
     "commands" => $command,
-    "errors" => $errors,
+    "errors" => $errors
     );
 
-$cb = get_jsonp_callback();
-echo jsonp_begin($cb);
+$jp = new JSONP();
+$jp->begin();
 echo json_encode($result, JSON_HEX_APOS | JSON_HEX_QUOT);
-echo jsonp_end($cb);
+$jp->end();
