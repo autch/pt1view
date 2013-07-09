@@ -1,5 +1,5 @@
 $(function() {
-    var loadPrograms = function() {
+    var updatePrograms = function() {
 	var reltime = function(start, end) {
 	    var from = new Date(1000 * parseInt(start));
 	    var now;
@@ -15,52 +15,56 @@ $(function() {
 	    }
 	    return v.join("");
 	};
-	jQuery.getJSON("programs.php", function(data, status, xhr) {
+	jQuery.getJSON("programs.php?callback=?", function(data, status, xhr) {
 	    var $ul = $('#program');
 	    var $sel = $("#ch");
 
-	    $ul.empty();
 	    $sel.empty();
+	    $ul.data("program", data);
 	    for(var i = 0; i < data.length; i++) {
-		var $li = $("<li>");
-		var $a_ns = $("<a>");
-		var ch = data[i];
-
-		$("<h1>").text(ch.title).appendTo($a_ns);
-		$("<p>").text(ch.channel_disc + ": ").append($("<strong>").text(ch.name)).appendTo($a_ns);
-		$("<p>").text(ch.description).appendTo($a_ns);
-		$("<p>").addClass("ui-li-aside").text(reltime(ch.starttime) + "-" + reltime(ch.endtime, ch.starttime)).appendTo($a_ns);
-
-		$a_ns.attr({
-		    "href": "#new-stream",
-		    "data-channel": ch.channel,
-		    "data-rel": "popup",
-		    "data-position-to": "window",
-		}).appendTo($li);
-		$("<a>").attr({
-		    "href": "#program-detail",
-		    "data-channel": ch.channel,
-		    "data-rel": "popup",
-		    "data-position-to": "window",
-		    "data-transition": "pop"
-		}).text("番組詳細").appendTo($li);
-
-		$li.attr("id", "ch" + ch.channel).data("program", ch).appendTo($ul);
-
-		$('<option>').attr("value", ch.channel).text(ch.channel_disc + ": " + ch.name).appendTo($sel);
+		var item = data[i];
+		$('<option>').attr("value", item.channel).text(item.channel_disc + ": " + item.name).appendTo($sel);
+		item.starttime_rel = reltime(item.starttime);
+		item.endtime_rel = reltime(item.endtime, item.starttime);
 	    }
 
-	    /*window.setTimeout(function() {*/ $ul.listview("refresh");// }, 0);
+	    var template = $ul.data('template');
+	    $ul.html(template(data));
+
+	    if($ul.hasClass("ui-listview"))
+		$ul.listview("refresh");
+	    else 
+		$ul.trigger("create");
 	});
     };
-    loadPrograms();
-    window.setInterval(loadPrograms, 1000 * 60 * 5); // 5 minutes
-    $('#main').on("click", "a#reload-programs", function(e) { loadPrograms(); });
+
+    var template = Handlebars.compile($('#hb-program').html());
+    $('#program').data('template', template);
+    $('#program-detail-content').data('template', Handlebars.compile($('#hb-program-detail').html()));
+    $('#process-table tbody').data('template', Handlebars.compile($('#hb-process').html()));
+        
+    window.setInterval(updatePrograms, 1000 * 60 * 5); // 5 minutes
+    $('#main').on("click", "a#reload-programs", function(e) { updatePrograms(); });
+    
+    updatePrograms();
+
+    $.getJSON("command.php?callback=?", { action: "default" }, function(data, status, xhr) {
+	var defs = data.defaults;
+
+	$('#device').val(defs['device']);
+	$('#addr').val(defs['addr']);
+	$('#port').val(defs['port']);
+	$('#tcp_port').val(defs['tcp_port']);
+	$('#b25').val(defs['b25']);
+	$('#strip').val(defs['strip']);
+    });
+
     
     $('#program').on("click", "a[href='#program-detail']", function(e) {
 	var $self = $(e.currentTarget);
 	var $li = $self.parents("li");
-	var prog = $li.data("program");
+	var ch = $self.attr("data-channel");
+	var prog = $('#program').data("program").filter(function(i) { return i.channel == ch })[0];
 
 	var $div = $('#program-detail-content');
 	var prog_start = new Date(1000 * parseInt(prog.starttime));
@@ -70,15 +74,12 @@ $(function() {
 		     d.getHours(), ":", d.getMinutes()];
 	    return v.join("");
 	};
-	    
-	$div.empty();
-	$("<h4>").text(prog.title).appendTo($div);
-	$("<div>").text(prog.channel_disc + ": " + prog.name).appendTo($div);
-	$("<div>").text(localFormat(prog_start) + " - " + localFormat(prog_end)).appendTo($div);
-	$("<p>").text(prog.description).appendTo($div);
-	$("#program-detail").popup("open");
 
-	return false;
+	prog.prog_start = localFormat(prog_start);
+	prog.prog_end = localFormat(prog_end);
+	    
+	var template = $div.data('template');
+	$div.html(template(prog));
     });
 
     $('#program').on("click", "a[href='#new-stream']", function(e) {
@@ -90,37 +91,12 @@ $(function() {
     });
 
     $('#main').on("click", "a[href='#processes']", function(e) {
-	jQuery.getJSON("processes.php", function(data, status, xhr) {
+	jQuery.getJSON("processes.php?callback=?", function(data, status, xhr) {
 	    var $tb = $("#process-table tbody");
 
-	    $tb.empty();
-	    for(var i = 0; i < data.length; i++) {
-		var proc = data[i];
-		var $tr = $("<tr>");
-		var $a = $("<a>");
+	    var template = $tb.data("template");
+	    $tb.html(template(data));
 
-		$a.attr({ 
-		    "href": "command.php?action=kill&pid=" + proc.pid,
-		    "data-action": "kill",
-		    "data-pid": proc.pid,
-		    "data-role": "button",
-		    "data-mini": "true",
-		    "data-inline": "true",
-		    "data-icon": "delete",
-		    "data-iconpos": "notext",
-		    "data-theme": "e",
-		}).text("停止");
-
-		$("<td>").text(proc.pid).appendTo($tr);
-		$("<td>").append($("<code>").text(proc.args)).appendTo($tr);
-		$("<td>").append($a).appendTo($tr);
-		if(proc.tsserv) {
-		    $("<td>").append($("<a>").attr("href", "tsserv.php?port=" + proc.tsserv.port).text("観る")).appendTo($tr);
-		} else {
-		    $("<td>").appendTo($tr);
-		}
-		$tr.appendTo($tb);
-	    }
 	    $("#process-table").table("refresh");
 	    $("#main").trigger("create");
 	    $("#processes").popup("open");
@@ -128,25 +104,23 @@ $(function() {
 	return false;
     });
 
+    $('#messages').on("click", "a[data-rel='back']", function() {
+	$('#messages').hide();
+    });
+
     var showCommandResult = function(data, status, xhr) {
-	var meta = function(array, $target) {
-	    var $ul = $target.find("ul");
+	var meta = function(text) {
+	    var $target = $('#messages');
+	    var $h3 = $target.find("h3");
 	    
-	    $ul.empty();
-	    for(var i = 0; i < array.length; i++) {
-		var $li = $('<li>');
-		$li.text(array[i]).appendTo($ul);
-	    }
-	    $ul.listview("refresh");
-	    $('#main').trigger("create");
-	    window.setTimeout(function() {
-		$target.popup("open", { positionTo: "window" });
-	    }, 0);
+	    $target.hide();
+	    $h3.text(text).appendTo($target);
+	    $target.show();
 	};
 	if(data.errors.length > 0) {
-	    meta(data.errors, $('#errors'));
+	    meta("エラー：" + data.errors[0]);
 	} else if(data.commands.length > 0) {
-	    meta(data.commands, $('#result'));
+	    meta("コマンドを実行：" + data.commands[0]);
 	}
     };
 
@@ -155,9 +129,9 @@ $(function() {
 	var pid = $self.attr("data-pid");
 	var request = { action: "kill", pid: pid };
 
-	$.getJSON("command.php", request, showCommandResult);
+	$.getJSON("command.php?callback=?", request, showCommandResult);
+
 	$('#processes').popup("close");
-	return false;
     });
 
     $('#new-stream').on("click", "#start_tcp,#start_udp", function(e) {
@@ -173,7 +147,7 @@ $(function() {
 	    b25: $('#b25').val(),
 	    strip: $('#strip').val(),
 	};
-	$.getJSON("command.php", request, showCommandResult);
+	$.getJSON("command.php?callback=?", request, showCommandResult);
 	$('#new-stream').popup("close");
 	return false;
     });

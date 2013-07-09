@@ -72,6 +72,8 @@ case 'change':
         }
     }
     break;
+case 'default':
+    break;
 default:
     header("Status: 400 Bad Request");
     die("Invalid action");
@@ -81,7 +83,8 @@ header("Content-type: application/json; charset=UTF-8");
 
 $result = array(
     "commands" => $command,
-    "errors" => $errors
+    "errors" => $errors,
+    "defaults" => RecPT1::getDefault()
     );
 
 $jp = new JSONP();

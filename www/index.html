@@ -1,4 +1,4 @@
-<!DOCTYPE html>{* -*- mode: html; -*- *}
+<!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -40,8 +40,7 @@
 	<div class="control-group">
 	  <label class="control-label" for="device">PT1/2 デバイス</label>
 	  <div class="controls">
-	    <input type="text" name="device" id="device" maxlength="16" size="16" class="input-small"
-		   value="{$pt1.device|default:""|escape}" placeholder="空欄で自動検出" />
+	    <input type="text" name="device" id="device" maxlength="16" size="16" class="input-small" value="" placeholder="空欄で自動検出" />
 	  </div>
 	</div>
 	<div class="control-group">
@@ -53,18 +52,15 @@
 	<div class="control-group">
 	  <label class="control-label">オプション</label>
 	  <div class="controls">
-	    <label class="checkbox inline"><input type="checkbox" name="b25" id="b25"
-						  {if $pt1.b25}checked="checked"{/if}/>B25 復号</label>
-	    <label class="checkbox inline"><input type="checkbox" name="strip" id="strip"
-						  {if $pt1.strip}checked="checked"{/if}/>NULL 除去</label>
+	    <label class="checkbox inline"><input type="checkbox" name="b25" id="b25" checked="checked"/>B25 復号</label>
+	    <label class="checkbox inline"><input type="checkbox" name="strip" id="strip" checked="checked"/>NULL 除去</label>
 	  </div>
 	</div>
 	<div class="control-group">
 	  <label class="control-label" for="tcp_port">TCP</label>
 	  <div class="controls">
 	    <div class="inline">
-	      <input type="text" name="tcp_port" id="tcp_port" maxlength="5" size="5" class="input-mini"
-		     value="{$pt1.tcp_port|default:"11234"|escape}"/>
+	      <input type="text" name="tcp_port" id="tcp_port" maxlength="5" size="5" class="input-mini" value="11234"/>
 	      <span class="add-on">/tcp</span>
 	    </div>
 	  </div>
@@ -72,14 +68,12 @@
 	<div class="control-group">
 	  <label class="control-label" for="addr">UDP</label>
 	  <div class="controls">
-	    <div class="inline">{strip}
-	      <input type="text" name="addr" id="addr" class="input-small"
-		     value="{$pt1.addr|default:$smarty.server.REMOTE_ADDR|escape}"/>
+	    <div class="inline">
+	      <input type="text" name="addr" id="addr" class="input-small" value=""/>
 	      <span class="add-on">:</span>
-	      <input type="text" name="port" id="port" maxlength="5" size="5" class="input-mini"
-		     value="{$pt1.port|default:"1234"|escape}"/>
+	      <input type="text" name="port" id="port" maxlength="5" size="5" class="input-mini" value="1234"/>
 	      <span class="add-on">/udp</span>
-	      {/strip}</div>
+	    </div>
 	  </div>
 	</div>
       </form>
@@ -113,7 +107,7 @@
   </table>
   <table id="programs" class="table table-bordered">
     <thead>
-      <tr><th>チャンネル</th><th>放送時間</th><th>番組名</th><th>番組内容</th><th>アクション</th></tr>
+      <tr><th>チャンネル</th><th>放送時間</th><th>番組名</th><th>番組内容</th><th>操作</th></tr>
     </thead>
     <tbody>
     </tbody>
@@ -126,7 +120,33 @@
 <script src="js/libs/bootstrap/transition.js"></script>
 <script src="js/libs/bootstrap/alert.js"></script>
 <script src="js/libs/bootstrap/modal.js"></script>
+<script src="js/handlebars.js"></script>
 <script src="js/script.js"></script>
 
+<script id="hb-program" type="text/x-handlebars-template">
+  {{#each this}}
+  <tr id="ch{{channel}}" data-ch="{{channel}}">
+    <td>{{channel_disc}}: {{name}}</td><td>{{starttime_rel}}-{{endtime_rel}}</td>
+    <td>{{title}}</td>
+    <td class="prog_desc">{{description}}</td>
+    <td><a href="#new-stream" data-ch="{{channel}}" role="button" data-toggle="modal" class="btn btn-primary">開始</a></td>
+  </tr>
+  {{/each}}
+</script>
+
+<script id="hb-process" type="text/x-handlebars-template">
+  {{#each this}}
+  <tr id="pid{{pid}}" data-pid="{{pid}}">
+    <td>{{pid}}</td>
+    <td class="args">{{args}}</td>
+    <td><a href="#" data-pid="{{pid}}" data-action="kill" class="btn btn-danger">停止</a></td>
+    {{#if tsserv}}
+    <td><a href="tsserv.php?port={{port}}">観る</a></td>
+    {{else}}
+    <td></td>
+    {{/if}}
+  </tr>
+  {{/each}}
+</script>
 </body>
 </html>

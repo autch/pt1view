@@ -11,8 +11,8 @@ array_unshift($path, TNST_LIB);
 array_unshift($path, EPGREC_PATH);
 ini_set('include_path', implode(PATH_SEPARATOR, $path));
 
-require_once 'TNSmarty.class.php';
 require_once 'Settings.class.php';
 require_once 'epgrec.inc.php';
 require_once 'recpt1.inc.php';
 require_once 'jsonp.inc.php';
+
