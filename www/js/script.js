@@ -129,7 +129,7 @@ $(function() {
 	$.getJSON("command.php?callback=?", request, showCommandResult);
 	return false;
     });
-    $("a[class='brand']").on("click", function(e) {
+    $("a[data-role='reload']").on("click", function(e) {
 	updatePeriodic();
     });
 });

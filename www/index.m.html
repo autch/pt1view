@@ -10,6 +10,9 @@
     <script src="js/handlebars.js"></script>
     <link rel="stylesheet" href="css/m.css" />
     <script src="js/m.js"></script>
+    <style>
+      .ui-li-aside { width: auto; }
+    </style>
   </head>
   <body>
     <div data-role="page" id="main">
@@ -19,7 +22,7 @@
 	<a href="#processes" data-rel="popup" data-position-to="origin" data-icon="grid" class="ui-btn-right">プロセス</a>
       </div><!-- /header -->
       <div id="messages" class="ui-bar ui-bar-e" style="display: none;">
-	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">閉じる</a>
+	<a href="#" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">閉じる</a>
 	<h3></h3>
       </div>
       <div data-role="content">
@@ -89,6 +92,9 @@
 	    </ul>
 	  </form>
 	</div>
+      </div>
+      <div data-role="footer" class="ui-bar">
+	<a href="index.html" target="_self">フル版</a>
       </div>
     </div>
 

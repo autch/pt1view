@@ -15,6 +15,9 @@ $(function() {
 	    }
 	    return v.join("");
 	};
+
+	$.mobile.loading("show");
+
 	jQuery.getJSON("programs.php?callback=?", function(data, status, xhr) {
 	    var $ul = $('#program');
 	    var $sel = $("#ch");
@@ -35,6 +38,8 @@ $(function() {
 		$ul.listview("refresh");
 	    else 
 		$ul.trigger("create");
+
+	    $.mobile.loading("hide");
 	});
     };
 
@@ -45,6 +50,8 @@ $(function() {
         
     window.setInterval(updatePrograms, 1000 * 60 * 5); // 5 minutes
     $('#main').on("click", "a#reload-programs", function(e) { updatePrograms(); });
+
+    
     
     updatePrograms();
 
@@ -59,7 +66,6 @@ $(function() {
 	$('#strip').val(defs['strip']);
     });
 
-    
     $('#program').on("click", "a[href='#program-detail']", function(e) {
 	var $self = $(e.currentTarget);
 	var $li = $self.parents("li");
@@ -91,6 +97,7 @@ $(function() {
     });
 
     $('#main').on("click", "a[href='#processes']", function(e) {
+	$.mobile.loading("show");
 	jQuery.getJSON("processes.php?callback=?", function(data, status, xhr) {
 	    var $tb = $("#process-table tbody");
 
@@ -99,14 +106,13 @@ $(function() {
 
 	    $("#process-table").table("refresh");
 	    $("#main").trigger("create");
+	    $.mobile.loading("hide");
 	    $("#processes").popup("open");
 	});
 	return false;
     });
 
-    $('#messages').on("click", "a[data-rel='back']", function() {
-	$('#messages').hide();
-    });
+    $('#messages').on("click", "a", function() { $('#messages').hide(); });
 
     var showCommandResult = function(data, status, xhr) {
 	var meta = function(text) {
@@ -116,6 +122,7 @@ $(function() {
 	    $target.hide();
 	    $h3.text(text).appendTo($target);
 	    $target.show();
+	    $.mobile.silentScroll(0);
 	};
 	if(data.errors.length > 0) {
 	    meta("エラー：" + data.errors[0]);
