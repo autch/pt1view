@@ -50,8 +50,6 @@ $(function() {
         
     window.setInterval(updatePrograms, 1000 * 60 * 5); // 5 minutes
     $('#main').on("click", "a#reload-programs", function(e) { updatePrograms(); });
-
-    
     
     updatePrograms();
 
@@ -141,11 +139,10 @@ $(function() {
 	$('#processes').popup("close");
     });
 
-    $('#new-stream').on("click", "#start_tcp,#start_udp", function(e) {
+    $('#new-stream').on("click", "a[data-action='start']", function(e) {
 	var $self = $(e.currentTarget);
-	var action = $self.attr("id") == "start_tcp" ? "tcp" : "udp";
 	var request = {
-	    action: action,
+	    action: $self.attr("data-method"),
 	    device: $('#device').val(),
 	    addr: $('#addr').val(),
 	    port: $('#port').val(),

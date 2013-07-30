@@ -92,7 +92,7 @@ $(function() {
 	updateProcesses();
     };
 
-    $('#programs tbody').on("click", "a[data-action='new']", function(e) {
+    $('#programs tbody').on("click", "a[href='#new-stream']", function(e) {
 	var $self = $(e.currentTarget);
 	var ch = $self.attr("data-ch");
 
@@ -113,11 +113,10 @@ $(function() {
 	$.getJSON("command.php?callback=?", request, showCommandResult);
     });
 
-    $('#new-stream').on("click", "#start_tcp,#start_udp", function(e) {
+    $('#new-stream').on("click", "a[data-action='start']", function(e) {
 	var $self = $(e.currentTarget);
-	var action = $self.attr("id") == "start_tcp" ? "tcp" : "udp";
 	var request = {
-	    action: action,
+	    action: $self.attr("data-method"),
 	    device: $('#device').val(),
 	    addr: $('#addr').val(),
 	    port: $('#port').val(),
