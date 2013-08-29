@@ -37,6 +37,8 @@ $(function() {
     $('#programs tbody').data('template', hb_program);
     var hb_process = Handlebars.compile($('#hb-process').html());
     $('#processes tbody').data('template', hb_process);
+    var hb_alerts = Handlebars.compile($('#alerts').html());
+    $('#alerts').data('template', hb_alerts);
 
     var updateProcesses = function() {
 	$.getJSON("processes.php?callback=?", function(data, status, xhr) {
@@ -64,30 +66,24 @@ $(function() {
 	$('#strip').val(defs['strip']);
     });
 
-    var showCommand = function(args) {
-	var $target = $('#command');
-	var $args = $target.find("code");
+    var showAlerts = function(args, heading, klass) {
+	var template = $('#alerts').data('template');
+	var $target = $('#content');
+	var data = {
+	    "heading": heading,
+	    "body": args[0],
+	    "alert_class": klass
+	};
+	var $div = $(template(data));
 
-	$args.text(args);
-	$target.show();
+	$target.prepend($div);
     };
-    var showErrors = function(args) {
-	var $target = $('#errors');
-	var $ul = $target.find("ul");
 
-	$ul.empty();
-	for(var i = 0; i < args.length; i++) {
-	    $('<li>').text(args[i]).appendTo($ul);
-	}
-
-	$target.show();
-    };
-    
     var showCommandResult = function(data, status, xhr) {
 	if(data.errors.length > 0) {
-	    showErrors(data.errors);
+	    showAlerts(data.errors, "エラー", "alert-danger");
 	} else if(data.commands.length > 0) {
-	    showCommand(data.commands[0]);
+	    showAlerts(data.commands, "コマンドを実行", "alert-success");
 	}
 	updateProcesses();
     };
@@ -103,7 +99,7 @@ $(function() {
 	$('#ch' + ch).toggleClass("selected", true);
 
 	$('#ch').val(ch);
-	$('#new-stream').popover("show");
+	$('#new-stream').modal("show");
     });
     $('#processes tbody').on("click", "a[data-action='kill']", function(e) {
 	var $self = $(e.currentTarget);
