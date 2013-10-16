@@ -29,6 +29,7 @@ $(function() {
 	    }
 
 	    var template = $target.data('template');
+	    $target.data('programs', data);
 	    $target.html(template(data));
 	});
     };
@@ -39,6 +40,8 @@ $(function() {
     $('#processes tbody').data('template', hb_process);
     var hb_alerts = Handlebars.compile($('#alerts').html());
     $('#alerts').data('template', hb_alerts);
+    var hb_selected_program = Handlebars.compile($('#hb-selected-program').html());
+    $('#selected-program').data('template', hb_selected_program);
 
     var updateProcesses = function() {
 	$.getJSON("processes.php?callback=?", function(data, status, xhr) {
@@ -88,6 +91,15 @@ $(function() {
 	updateProcesses();
     };
 
+    var updateProgramDetail = function(ch) {
+	var template = $('#selected-program').data('template');
+	var programs = $('#programs tbody').data('programs');
+	var data = programs.filter(function(v, k, a) {
+	    return v["channel"] == ch;
+	});
+	$('#selected-program').html(template(data[0]));
+    };
+
     $('#programs tbody').on("click", "a[href='#new-stream']", function(e) {
 	var $self = $(e.currentTarget);
 	var ch = $self.attr("data-ch");
@@ -99,6 +111,9 @@ $(function() {
 	$('#ch' + ch).toggleClass("selected", true);
 
 	$('#ch').val(ch);
+
+	updateProgramDetail(ch);
+
 	$('#new-stream').modal("show");
     });
     $('#processes tbody').on("click", "a[data-action='kill']", function(e) {
@@ -126,5 +141,10 @@ $(function() {
     });
     $("a[data-role='reload']").on("click", function(e) {
 	updatePeriodic();
+    });
+    $('#ch').on("change", function(e) {
+	var $self = $(e.currentTarget);
+	var ch = $self.val();
+	updateProgramDetail(ch);
     });
 });

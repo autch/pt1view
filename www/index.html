@@ -57,6 +57,9 @@
 		  <div class="col-lg-10">
 		    <select id="ch" name="ch" class="form-control"></select>
 		  </div>
+		  <div class="col-lg-10">
+		    <div id="selected-program"></div>
+		  </div>
 		</div>
 		<div class="form-group">
 		  <label class="col-lg-2 control-label">オプション</label>
@@ -131,6 +134,14 @@
 	  <td><a href="#new-stream" data-ch="{{channel}}" role="button" data-toggle="modal" class="btn btn-primary">開始</a></td>
 	</tr>
 	{{/each}}
+      </script>
+
+      <script id="hb-selected-program" type="text/x-handlebars-template">
+	<div>
+	  <div>{{name}} <small>{{starttime_rel}}-{{endtime_rel}}</small></div>
+	  <div><b>{{title}}</b></div>
+	  <div class="prog_desc">{{description}}</div>
+	</div>
       </script>
 
       <script id="hb-process" type="text/x-handlebars-template">
