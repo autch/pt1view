@@ -4,9 +4,9 @@
     <meta charset="UTF-8"/>
     <title>pt1view</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="//code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
     <link rel="stylesheet" href="css/m.css" />
     <script src="js/m.js"></script>
@@ -104,7 +104,7 @@
       {{#each this}}
       <li id="ch{{channel}}"><a href="#new-stream" data-channel="{{channel}}" data-rel="popup" data-position-to="window">
 	  <h1>{{title}}</h1>
-	  <p>{{channel_disc}}: <strong>{{name}}</strong></p>
+	  <p>[{{type}}] {{channel}}: <strong>{{name}}</strong></p>
 	  <p>{{description}}</p>
 	  <p class="ui-li-aside">{{starttime_rel}}-{{endtime_rel}}</p>
 	  <a href="#program-detail" data-channel="{{channel}}" data-rel="popup" data-position-to="window" data-transition="pop">番組詳細</a>
@@ -115,7 +115,7 @@
 
     <script id="hb-program-detail" type="text/x-handlebars-template">
       <h4>{{title}}</h4>
-      <div>{{channel_disc}}: <strong>{{name}}</strong></div>
+      <div>[{{type}}] {{channel}}: <strong>{{name}}</strong></div>
       <div>{{prog_start}} - {{prog_end}}</div>
       <p>{{description}}</p>
     </script>
@@ -131,7 +131,6 @@
 	{{else}}
 	<td></td>
 	{{/if}}
-
       </tr>
       {{/each}}
     </script>

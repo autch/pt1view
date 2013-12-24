@@ -118,8 +118,8 @@
 	</table>
       </div>
     </div><!-- /.container -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+    <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.3.min.js"><\/script>')</script>
 
       <script src="js/vendor/bootstrap.min.js"></script>
       <script src="js/handlebars.js"></script>
@@ -128,7 +128,7 @@
       <script id="hb-program" type="text/x-handlebars-template">
 	{{#each this}}
 	<tr id="ch{{channel}}" data-ch="{{channel}}">
-	  <td>{{channel_disc}}: {{name}}</td><td>{{starttime_rel}}-{{endtime_rel}}</td>
+	  <td>{{channel}}: {{name}}</td><td>{{starttime_rel}}-{{endtime_rel}}</td>
 	  <td>{{title}}</td>
 	  <td class="prog_desc">{{description}}</td>
 	  <td><a href="#new-stream" data-ch="{{channel}}" role="button" data-toggle="modal" class="btn btn-primary">開始</a></td>
@@ -137,10 +137,11 @@
       </script>
 
       <script id="hb-selected-program" type="text/x-handlebars-template">
-	<div>
-	  <div>{{name}} <small>{{starttime_rel}}-{{endtime_rel}}</small></div>
-	  <div><b>{{title}}</b></div>
+	<div class="panel panel-default">
+         <div class="panel-heading">{{title}} <small>{{starttime_rel}}-{{endtime_rel}}</small></div>
+         <div class="panel-body">
 	  <div class="prog_desc">{{description}}</div>
+         </div>
 	</div>
       </script>
 
