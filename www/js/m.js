@@ -26,7 +26,7 @@ $(function() {
 	    $ul.data("program", data);
 	    for(var i = 0; i < data.length; i++) {
 		var item = data[i];
-		$('<option>').attr("value", item.channel).text(item.channel_disc + ": " + item.name).appendTo($sel);
+		$('<option>').attr("value", item.channel).text(item.channel + ": " + item.name).appendTo($sel);
 		item.starttime_rel = reltime(item.starttime);
 		item.endtime_rel = reltime(item.endtime, item.starttime);
 	    }

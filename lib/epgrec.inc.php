@@ -48,11 +48,11 @@ class EpgrecDB
     public function selectPrograms()
     {
         $sql = "SELECT c.channel, c.channel_disc, c.name, p.title, p.description, "
-            ."  UNIX_TIMESTAMP(p.starttime) starttime, UNIX_TIMESTAMP(p.endtime) endtime, t.name_jp "
+            ."  UNIX_TIMESTAMP(p.starttime) starttime, UNIX_TIMESTAMP(p.endtime) endtime, t.name_jp, c.type "
             ."FROM %1\$sprogramTbl p, %1\$schannelTbl c, %1\$scategoryTbl t "
             ."WHERE p.channel_disc = c.channel_disc AND p.category_id = t.id "
-            ."AND c.type = 'GR' AND c.skip = 0 AND p.starttime <= now() AND p.endtime >= now() "
-            ."ORDER BY c.channel_disc ASC";
+            ."AND c.skip = 0 AND p.starttime <= now() AND p.endtime >= now() "
+            ."ORDER BY c.type, c.channel, c.name ASC";
         $sql = sprintf($sql, $this->config->tbl_prefix);
 
         $channels = array();
