@@ -16,7 +16,7 @@ case 'udp':
     if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
     if(!empty($_REQUEST['addr'])) $upd['addr'] = trim($_REQUEST['addr']);
     if(!empty($_REQUEST['port'])) $upd['port'] = intval($_REQUEST['port']);
-    if(!empty($_REQUEST['ch'])) $upd['ch'] = intval($_REQUEST['ch']);
+    if(!empty($_REQUEST['ch'])) $upd['ch'] = trim($_REQUEST['ch']);
     if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
     if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
       
@@ -32,7 +32,7 @@ case 'tcp':
     $upd = array();
     if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
     if(!empty($_REQUEST['tcp_port'])) $upd['tcp_port'] = intval($_REQUEST['tcp_port']);
-    if(!empty($_REQUEST['ch'])) $upd['ch'] = intval($_REQUEST['ch']);
+    if(!empty($_REQUEST['ch'])) $upd['ch'] = trim($_REQUEST['ch']);
     if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
     if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
           
@@ -60,12 +60,12 @@ case 'change':
     $target_pid = 0;
     $ch = 0;
     if(!empty($_REQUEST['pid'])) $target_pid = intval($_REQUEST['pid']);
-    if(!empty($_REQUEST['ch'])) $ch = intval($_REQUEST['ch']);
+    if(!empty($_REQUEST['ch'])) $ch = trim($_REQUEST['ch']);
 
     $processes = RecPT1::findRecPT1();
     foreach($processes as $proc) {
         if($proc['pid'] === $target_pid) {
-            $cmd = sprintf("%s --pid %d --channel %d", RECPT1CTL_PATH, intval($proc['pid']), intval($ch));
+            $cmd = sprintf("%s --pid %d --channel %s", RECPT1CTL_PATH, intval($proc['pid']), $ch);
             $sh_cmd = sprintf("sh -c '%s >/dev/null 2>&1 &'", $cmd);
             $command[] = $sh_cmd;
             exec($sh_cmd);

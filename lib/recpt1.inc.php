@@ -102,7 +102,7 @@ class RecPT1
 
                 if(preg_match('/-p\s+(\d+)/', $tsserv_args, $matches))
                     $port = intval($matches[1]);
-                else if(preg_match('/--port(\s+|=)(\d+)/', $tsserv_args, $matches))
+                else if(preg_match('/--port(\s+|=)\'?(\d+)\'?/', $tsserv_args, $matches))
                     $port = intval($matches[2]);
 
                 $proc = array('user' => $user,
