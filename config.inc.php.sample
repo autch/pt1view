@@ -1,0 +1,15 @@
+<?php
+
+define('TNST_ROOT', dirname(__FILE__));
+define('TNST_DOCROOT', TNST_ROOT . '/www');
+define('TNST_LIB', TNST_ROOT . '/lib');
+
+define('EPGREC_PATH', '/var/www/ssl/epgrec');
+define('RECPT1_PATH', '/usr/local/bin/recpt1');
+define('RECPT1CTL_PATH', '/usr/local/bin/recpt1ctl');
+define('TSSERV_PATH', '/usr/local/bin/tsserv');
+
+define('URL_RTSP', 'rtmp://localhost:1935/tv/%s');
+define('URL_HLS', 'https://localhost/hls/%s.m3u');
+define('URL_DASH', 'https://localhost/dash/%s.mpd');
+
