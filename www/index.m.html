@@ -4,9 +4,9 @@
     <meta charset="UTF-8"/>
     <title>pt1view</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="//code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
     <link rel="stylesheet" href="css/m.css" />
     <script src="js/m.js"></script>
@@ -17,98 +17,94 @@
   <body>
     <div data-role="page" id="main">
       <div data-role="header" data-theme="b">
-	<a href="#" id="reload-programs" data-icon="refresh">番組表更新</a>
-	<h1>pt1view</h1>
-	<a href="#processes" data-rel="popup" data-position-to="origin" data-icon="grid" class="ui-btn-right">プロセス</a>
+        <a href="#" id="reload-programs" data-icon="refresh">番組表更新</a>
+        <h1>pt1view</h1>
+        <a href="#processes" data-rel="popup" data-position-to="origin" data-icon="grid" class="ui-btn-right">プロセス</a>
       </div><!-- /header -->
       <div id="messages" class="ui-bar ui-bar-b" style="display: none;">
-	<h3 style="display: inline-block;"></h3>
-	<div style="display: inline-block; text-align: right;">
-	<a href="#" data-role="button" data-theme="a" data-inline="true" data-icon="delete" data-iconpos="notext">閉じる</a>
-	</div>
+        <h3 style="display: inline-block;"></h3>
+        <div style="display: inline-block; text-align: right;">
+          <a href="#" data-role="button" data-theme="a" data-inline="true" data-icon="delete" data-iconpos="notext">閉じる</a>
+        </div>
       </div>
       <div data-role="content">
-	<ul data-role="listview" id="program" data-split-icon="info">
-	</ul>
+        <ul data-role="listview" id="program" data-split-icon="info">
+        </ul>
       </div><!-- /content -->
       <div data-role="popup" id="program-detail" class="ui-content">
-	<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-left">閉じる</a>
-	<h3>番組詳細</h3>
-	<div id="program-detail-content">
-	</div>
+        <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-left">閉じる</a>
+        <h3>番組詳細</h3>
+        <div id="program-detail-content">
+        </div>
       </div>
       <div data-role="popup" id="processes" class="ui-content">
-	<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-left">閉じる</a>
-	<h3>実行中のプロセス</h3>
-	<div id="process-detail-content">
-	  <table data-role="table" id="process-table" data-mode="reflow" class="ui-responsive table-stroke">
-	    <thead>
-	      <tr><th>PID</th><th>コマンド</th><th>操作</th><th>視聴</th></tr>
-	    </thead>
-	    <tbody>
-	    </tbody>
-	  </table>
-	</div>
+        <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-left">閉じる</a>
+        <h3>実行中のプロセス</h3>
+        <div id="process-detail-content">
+          <table data-role="table" id="process-table" data-mode="reflow" class="ui-responsive table-stroke">
+            <thead>
+              <tr><th>PID</th><th>コマンド</th><th>操作</th><th>視聴</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div data-role="popup" id="new-stream" data-theme="d" data-overlay-theme="a" data-dismissible="false">
-	<div data-role="header" data-theme="b">
-	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">キャンセル</a>
-	  <h1>ストリームを開始</h1>
-	</div><!-- /header -->
+        <div data-role="header" data-theme="b">
+          <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">キャンセル</a>
+          <h1>ストリームを開始</h1>
+        </div><!-- /header -->
 
-	<div data-role="content">
-	  <form method="POST">
-	    <ul data-role="listview">
-	      <li class="ui-field-contain">
-		<label for="device">PT1/2 デバイス</label>
-		<input type="text" name="device" id="device" value="" placeholder="自動検出">
-	      </li>
-	      <li class="ui-field-contain">
-		<label for="ch">物理チャンネル</label>
-		<select name="ch" id="ch"></select>
-	      </li>
-	      <li class="ui-field-contain">
-		<fieldset data-role="controlgroup" data-type="horizontal">
-		  <legend>オプション</legend>
-		  <label for="b25">B25 復号</label>
-		  <input type="checkbox" name="b25" id="b25" checked>
-		  <label for="strip">NULL 除去</label>
-		  <input type="checkbox" name="strip" id="strip" checked>
-		</fieldset>
-	      </li>
-	      <li class="ui-field-contain">
-		<label for="tcp_port">TCP ポート番号</label>
-		<input type="number" name="tcp_port" id="tcp_port" value="11234" placeholder="TCP ポート番号">
-	      </li>
-	      <li class="ui-field-contain" id="udp_peer">
-		<label for="addr">UDP ホスト:ポート</label>
-		<input type="text" name="addr" id="addr" value="" placeholder="UDP ホスト">
-		<input type="number" name="port" id="port" value="1234" placeholder="UDP ポート番号">
-	      </li>
-	      <li class="ui-field-contain">
-		<fieldset class="ui-grid-a">
-		  <div class="ui-block-a"><a href="#" data-role="button" data-action="start" data-method="tcp">TCP</a></div>
-		  <div class="ui-block-b"><a href="#" data-role="button" data-action="start" data-method="udp">UDP</a></div>
-		</fieldset>
-	      </li>
-	    </ul>
-	  </form>
-	</div>
+        <div data-role="content">
+          <form method="POST">
+            <ul data-role="listview">
+              <li class="ui-field-contain">
+                <label for="device">PT1/2 デバイス</label>
+                <input type="text" name="device" id="device" value="" placeholder="自動検出">
+              </li>
+              <li class="ui-field-contain">
+                <label for="ch">物理チャンネル</label>
+                <select name="ch" id="ch"></select>
+              </li>
+              <li class="ui-field-contain">
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                  <legend>オプション</legend>
+                  <label for="b25">B25 復号</label>
+                  <input type="checkbox" name="b25" id="b25" checked>
+                  <label for="strip">NULL 除去</label>
+                  <input type="checkbox" name="strip" id="strip" checked>
+                </fieldset>
+              </li>
+              <li class="ui-field-contain" id="udp_peer">
+                <label for="addr">UDP ホスト:ポート</label>
+                <input type="text" name="addr" id="addr" value="" placeholder="UDP ホスト">
+                <input type="number" name="port" id="port" value="1234" placeholder="UDP ポート番号">
+              </li>
+              <li class="ui-field-contain">
+                <fieldset class="ui-grid-a">
+                  <div class="ui-block-a"><a href="#" data-role="button" data-action="start" data-method="rtsp">RTSP</a></div>
+                  <div class="ui-block-b"><a href="#" data-role="button" data-action="start" data-method="udp">UDP</a></div>
+                </fieldset>
+              </li>
+            </ul>
+          </form>
+        </div>
       </div>
       <div data-role="footer" class="ui-bar" data-theme="b">
-	<a href="index.html" target="_self">フル版</a>
+        <a href="index.html" target="_self">フル版</a>
       </div>
     </div>
 
     <script id="hb-program" type="text/x-handlebars-template">
       {{#each this}}
       <li id="ch{{channel}}"><a href="#new-stream" data-channel="{{channel}}" data-rel="popup" data-position-to="window">
-	  <h1>{{title}}</h1>
-	  <p>[{{type}}] {{channel}}: <strong>{{name}}</strong></p>
-	  <p>{{description}}</p>
-	  <p class="ui-li-aside">{{starttime_rel}}-{{endtime_rel}}</p>
-	  <a href="#program-detail" data-channel="{{channel}}" data-rel="popup" data-position-to="window" data-transition="pop">番組詳細</a>
-	</a>
+          <h1>{{title}}</h1>
+          <p>[{{type}}] {{channel}}: <strong>{{name}}</strong></p>
+          <p>{{description}}</p>
+          <p class="ui-li-aside">{{starttime_rel}}-{{endtime_rel}}</p>
+          <a href="#program-detail" data-channel="{{channel}}" data-rel="popup" data-position-to="window" data-transition="pop">番組詳細</a>
+        </a>
       </li>
       {{/each}}
     </script>
@@ -123,14 +119,13 @@
     <script id="hb-process" type="text/x-handlebars-template">
       {{#each this}}
       <tr>
-	<td>{{pid}}</td>
-	<td><code>{{args}}</code></td>
-	<td><a href="#" data-action="kill" data-pid="{{pid}}" data-role="button" data-mini="true" data-inline="true" data-icon="delete" data-theme="e">停止</a></td>
-	{{#if tsserv}}
-	<td><a href="tsserv.php?port={{tsserv.port}}">観る</a></td>
-	{{else}}
-	<td></td>
-	{{/if}}
+        <td>{{pid}}</td>
+        <td><code>{{args}}</code></td>
+        <td><a href="#" data-action="kill" data-pid="{{pid}}" data-role="button" data-mini="true" data-inline="true" data-icon="delete" data-theme="e">停止</a></td>
+        <td>
+        <a data-role="button" data-mini="true" data-inline="true" href="http.html?url={{URL_HLS}}" target="_blank">HLS</a>
+        <a data-role="button" data-mini="true" data-inline="true" href="http.html?url={{URL_DASH}}" target="_blank">DASH</a>
+        </td>
       </tr>
       {{/each}}
     </script>

@@ -28,15 +28,14 @@ case 'udp':
         exec($sh_cmd);
     }
     break;
-case 'tcp':
+case 'rtsp':
     $upd = array();
     if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
-    if(!empty($_REQUEST['tcp_port'])) $upd['tcp_port'] = intval($_REQUEST['tcp_port']);
     if(!empty($_REQUEST['ch'])) $upd['ch'] = trim($_REQUEST['ch']);
     if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
     if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
-          
-    $sh_cmd = $pt1->buildForTCP($upd);
+
+    $sh_cmd = $pt1->buildForRTSP($upd);
     $command[] = $sh_cmd;
     exec($sh_cmd);
     break;

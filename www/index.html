@@ -71,15 +71,6 @@
 		  </div>
 		</div>
 		<div class="form-group">
-		  <label class="col-lg-2 control-label" for="tcp_port">TCP</label>
-		  <div class="col-lg-10">
-		    <div class="input-group">
-		      <input type="text" class="form-control" name="tcp_port" id="tcp_port" maxlength="5" size="5" class="input-mini" value="11234"/>
-		      <span class="input-group-addon">/tcp</span>
-		    </div>
-		  </div>
-		</div>
-		<div class="form-group">
 		  <label class="col-lg-2 control-label" for="addr">UDP</label>
 		  <div class="col-lg-10 input-group">
 		    <input type="text" class="form-control" name="addr" id="addr" class="input-small" value=""/>
@@ -91,9 +82,9 @@
 	      </form>
 	    </div><!-- /.modal-body -->
 	    <div class="modal-footer">
-	      <a href="#" class="btn" data-dismiss="modal">キャンセル</a>
-	      <a href="#" data-action="start" data-method="tcp" class="btn btn-primary" data-dismiss="modal">TCP で開始</a>
-	      <a href="#" data-action="start" data-method="udp" class="btn btn-primary" data-dismiss="modal">UDP で開始</a>
+	      <a href="#" class="btn btn-default" data-dismiss="modal">キャンセル</a>
+          <a href="#" class="btn btn-primary" data-action="start" data-method="rtsp" data-dismiss="modal">RTSP</a>
+          <a href="#" class="btn btn-primary" data-action="start" data-method="udp" data-dismiss="modal">UDP</a>
 	    </div>
 	  </div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -151,11 +142,10 @@
 	  <td>{{pid}}</td>
 	  <td class="args">{{args}}</td>
 	  <td><a href="#" data-pid="{{pid}}" data-action="kill" class="btn btn-danger">停止</a></td>
-	  {{#if tsserv}}
-	  <td><a href="tsserv.php?port={{tsserv.port}}">観る</a></td>
-	  {{else}}
-	  <td></td>
-	  {{/if}}
+	  <td>
+        <a href="http.html?url={{URL_HLS}}" target="_blank">HLS</a>
+        <a href="http.html?url={{URL_DASH}}" target="_blank">DASH</a>
+      </td>
 	</tr>
 	{{/each}}
       </script>

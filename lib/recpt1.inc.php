@@ -57,65 +57,93 @@ class RecPT1
         return $sh_cmd;
     }
 
-    public function buildForTCP($upd = array())
+    public function buildForRTSP($upd = array())
     {
         $this->update($upd);
         $this->pt1['output'] = '-';
         $cmd = $this->buildArgs();
-        $sh_cmd = sprintf("%s -p %d -- %s", TSSERV_PATH, $this->pt1['tcp_port'], $cmd);
+        $url_rtsp = sprintf(URL_RTSP, $this->pt1['ch']);
+        $sh_cmd = sprintf("sh -c \"%s | ffmpeg -v 0 -i /dev/stdin -vcodec libx264 -vprofile baseline -vb 2000k -vf \"yadif=0:-1,scale=iw/2:-1\" -acodec libfaac -ab 128k -threads 4 -f flv %s >/dev/null 2>&1 &\"", $cmd, $url_rtsp);
         return $sh_cmd;
+    }
+
+    public static function args2hash($args)
+    {
+        $opts = array();
+        $opts_end = FALSE;
+
+        $av = array_values($args); // clone
+        array_shift($av); // $argv[0]
+        while(!empty($av) && !$opts_end) {
+            $i = array_shift($av);
+            switch($i) {
+            case '--b25':
+                $opts['b25'] = TRUE;
+                break;
+            case '--round':
+                $opts['round'] = intval(array_shift($av));
+                break;
+            case '--strip':
+                $opts['strip'] = TRUE;
+                break;
+            case '--EMM':
+                $optps['EMM'] = TRUE;
+                break;
+            case '--udp':
+                $opts['udp'] = TRUE;
+                break;
+            case '--addr':
+                $opts['addr'] = array_shift($av);
+                break;
+            case '--port':
+                $opts['port'] = intval(array_shift($av));
+                break;
+            case '--device':
+                $opts['device'] = array_shift($av);
+                break;
+            case '--lnb':
+                $opts['lnb'] = array_shift($av);
+                break;
+            case '--sid':
+                $opts['sid'] = array_shift($av);
+                break;
+            default:
+                $opts_end = TRUE;
+                array_unshift($av, $i);
+                break;
+            }
+        }
+        $opts['ch'] = array_shift($av);
+        $opts['duration'] = array_shift($av);
+        $opts['outfile'] = array_shift($av);
+        return $opts;
     }
 
     public static function findRecPT1()
     {
-        $cmd = sprintf("LANG=ja_JP.UTF-8 ps -C recpt1 -o ruser=,pid=,ppid=,args=");
+        $cmd = sprintf("ps -C recpt1 -o pid=");
         $output = shell_exec($cmd);
         $lines = explode("\n", $output);
 
         $procs = array();
         foreach($lines as $l) {
             if(trim($l) === '') continue;
-            list($user, $pid, $ppid, $args) = preg_split('/\s+/', $l, 4);
-            $proc = array('user' => $user,
-                          'pid' => intval($pid),
-                          'ppid' => intval($ppid),
-                          'args' => $args);
-            $proc['tsserv'] = self::findTSServ($proc);
+            $pid = intval($l);
+
+            $cmdline = preg_split("/\\0/", file_get_contents(sprintf("/proc/%d/cmdline", $pid)));
+            $opts = self::args2hash($cmdline);
+
+            $proc = array('pid' => intval($pid),
+                          'args' => join(" ", $cmdline),
+                          'opts' => $opts,
+                          'ch' => $opts['ch'],
+                          'URL_HLS' => sprintf(URL_HLS, $opts['ch']),
+                          'URL_DASH' => sprintf(URL_DASH, $opts['ch'])
+                );
             $procs[] = $proc;
         }
 
         return $procs;
-    }
-
-    public static function findTSServ($recpt1_proc)
-    {
-        $cmd = sprintf("LANG=ja_JP.UTF-8 ps -C tsserv -o ruser=,pid=,ppid=,args=");
-        $output = shell_exec($cmd);
-        $lines = explode("\n", $output);
-
-        foreach($lines as $l) {
-            if(trim($l) === '') continue;
-            list($user, $pid, $ppid, $tsserv, $args) = preg_split('/\s+/', $l, 5);
-            if($recpt1_proc['ppid'] == intval($pid)) {
-                preg_match('/^(.*)\s+--\s+(.*)$/', $args, $matches);
-                list($tsserv_args, $recpt1_args) = $matches;
-
-                if(preg_match('/-p\s+(\d+)/', $tsserv_args, $matches))
-                    $port = intval($matches[1]);
-                else if(preg_match('/--port(\s+|=)\'?(\d+)\'?/', $tsserv_args, $matches))
-                    $port = intval($matches[2]);
-
-                $proc = array('user' => $user,
-                              'pid' => intval($pid),
-                              'ppid' => intval($ppid),
-                              'tsserv' => $tsserv,
-                              'port' => intval($port),
-                              'args' => $recpt1_args);
-                return $proc;
-            }
-        }
-
-        return FALSE;
     }
 }
 
