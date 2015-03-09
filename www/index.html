@@ -102,7 +102,7 @@
       <div class="table-responsive">
 	<table id="programs" class="table table-bordered">
 	  <thead>
-	    <tr><th>チャンネル</th><th>放送時間</th><th>番組名</th><th>番組内容</th><th>操作</th></tr>
+	    <tr><th>タイプ</th><th>チャンネル</th><th>放送時間</th><th>番組名</th><th>番組内容</th><th>操作</th></tr>
 	  </thead>
 	  <tbody>
 	  </tbody>
@@ -119,6 +119,7 @@
       <script id="hb-program" type="text/x-handlebars-template">
 	{{#each this}}
 	<tr id="ch{{channel}}" data-ch="{{channel}}">
+          <td>{{type}}</td>
 	  <td>{{channel}}: {{name}}</td><td>{{starttime_rel}}-{{endtime_rel}}</td>
 	  <td>{{title}}</td>
 	  <td class="prog_desc">{{description}}</td>
@@ -143,8 +144,8 @@
 	  <td class="args">{{args}}</td>
 	  <td><a href="#" data-pid="{{pid}}" data-action="kill" class="btn btn-danger">停止</a></td>
 	  <td>
-        <a href="http.html?url={{URL_HLS}}" target="_blank">HLS</a>
-        <a href="http.html?url={{URL_DASH}}" target="_blank">DASH</a>
+        <a href="http.html?url={{URL_HLS}}" class="btn btn-default" target="_blank">HLS</a>
+        <a href="http.html?url={{URL_DASH}}" class="btn btn-default" target="_blank">DASH</a>
       </td>
 	</tr>
 	{{/each}}
