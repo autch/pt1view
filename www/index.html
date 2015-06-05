@@ -83,7 +83,16 @@
 	    </div><!-- /.modal-body -->
 	    <div class="modal-footer">
 	      <a href="#" class="btn btn-default" data-dismiss="modal">キャンセル</a>
-          <a href="#" class="btn btn-primary" data-action="start" data-method="rtsp" data-dismiss="modal">RTSP</a>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">RTMP
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" data-action="start" data-method="rtmp" data-dismiss="modal" data-preset="default">デフォルト</a></li>
+              <li><a href="#" data-action="start" data-method="rtmp" data-dismiss="modal" data-preset="1seg">似非ワンセグ</a></li>
+            </ul>
+          </div>
           <a href="#" class="btn btn-primary" data-action="start" data-method="udp" data-dismiss="modal">UDP</a>
 	    </div>
 	  </div><!-- /.modal-content -->
@@ -146,6 +155,9 @@
 	  <td>
         <a href="http.html?url={{URL_HLS}}" class="btn btn-default" target="_blank">HLS</a>
         <a href="http.html?url={{URL_DASH}}" class="btn btn-default" target="_blank">DASH</a>
+
+        <a href="{{URL_HLS}}">HLS .m3u8</a>
+        <a href="{{URL_DASH}}">DASH .mpd</a>
       </td>
 	</tr>
 	{{/each}}

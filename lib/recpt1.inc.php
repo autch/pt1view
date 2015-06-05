@@ -57,13 +57,18 @@ class RecPT1
         return $sh_cmd;
     }
 
-    public function buildForRTSP($upd = array())
+    public function buildForRTMP($upd = array())
     {
-        $this->update($upd);
-        $this->pt1['output'] = '-';
-        $cmd = $this->buildArgs();
-        $url_rtsp = sprintf(URL_RTSP, $this->pt1['ch']);
-        $sh_cmd = sprintf("sh -c \"%s | ffmpeg -v 0 -i /dev/stdin -vcodec libx264 -vprofile baseline -vb 2000k -vf \"yadif=0:-1,scale=iw/2:-1\" -acodec libfaac -ab 128k -threads 4 -f flv %s >/dev/null 2>&1 &\"", $cmd, $url_rtsp);
+        $url_rtmp = sprintf(URL_RTMP, $upd['ch']);
+
+        $ENV = array( 'CH' => $upd['ch'], 'RTMP_URL' => $url_rtmp, 'PRESET' => $upd['preset'] );
+        $env_str = array();
+        foreach($ENV as $k => $v) {
+            $env_str[] = escapeshellarg($k . "=" . $v);
+        }
+        $env_arg = join(' ', $env_str);
+
+        $sh_cmd = sprintf("sh -c 'env %s %s >/dev/null 2>&1 &'", $env_arg, START_RTMP_SH);
         return $sh_cmd;
     }
 

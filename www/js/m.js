@@ -18,7 +18,7 @@ $(function() {
 
         $.mobile.loading("show");
 
-        jQuery.getJSON("programs.php?callback=?", function(data, status, xhr) {
+        jQuery.getJSON("status.php?t=prog&callback=?", function(data, status, xhr) {
             var $ul = $('#program');
             var $sel = $("#ch");
 
@@ -96,7 +96,7 @@ $(function() {
 
     $('#main').on("click", "a[href='#processes']", function(e) {
         $.mobile.loading("show");
-        jQuery.getJSON("processes.php?callback=?", function(data, status, xhr) {
+        jQuery.getJSON("status.php?t=proc&callback=?", function(data, status, xhr) {
             var $tb = $("#process-table tbody");
 
             var template = $tb.data("template");

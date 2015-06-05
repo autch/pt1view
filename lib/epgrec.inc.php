@@ -35,7 +35,7 @@ class EpgrecDB
         $channels = array();
         
         if(($result = $this->db->query($sql)) !== FALSE) {
-            while(($row = $result->fetch_array()) !== NULL) {
+            while(($row = $result->fetch_assoc()) !== NULL) {
                 $channels[$row['channel']] = sprintf("%s: %s",
                                                      $row['channel_disc'], $row['name']);
             }
@@ -58,7 +58,7 @@ class EpgrecDB
         $channels = array();
 
         if(($result = $this->db->query($sql)) !== FALSE) {
-            while(($row = $result->fetch_array()) !== NULL) {
+            while(($row = $result->fetch_assoc()) !== NULL) {
                 $channels[] = $row;
             }
 

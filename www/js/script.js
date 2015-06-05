@@ -15,7 +15,7 @@ $(function() {
             }
             return v.join("");
         };
-        $.getJSON("programs.php?callback=?", function(data, status, xhr) {
+        $.getJSON("status.php?t=prog&callback=?", function(data, status, xhr) {
             var $target = $('#programs tbody');
             var $sel = $("#ch");
 
@@ -44,7 +44,7 @@ $(function() {
     $('#selected-program').data('template', hb_selected_program);
 
     var updateProcesses = function() {
-        $.getJSON("processes.php?callback=?", function(data, status, xhr) {
+        $.getJSON("status.php?t=proc&callback=?", function(data, status, xhr) {
             var $target = $('#processes tbody');
             var template = $target.data('template');
             console.log(data);
@@ -136,6 +136,7 @@ $(function() {
             ch: $('#ch').val(),
             b25: $('#b25').val(),
             strip: $('#strip').val(),
+            preset: $self.attr('data-preset')
         };
         $.getJSON("command.php?callback=?", request, showCommandResult);
         return false;

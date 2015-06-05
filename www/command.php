@@ -20,7 +20,7 @@ case 'udp':
     if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
     if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
       
-    if(!preg_match('/^(192\.168\.0\.)|(127\.)|(224\.)/', $upd['addr'])) {
+    if(!preg_match('/^(192\.168\.0\.)|(127\.)/', $upd['addr'])) {
         $errors[] = "リモートアドレスがローカルサブネット内にありません。UDPストリーミングを拒否します。";
     } else {
         $sh_cmd = $pt1->buildForUDP($upd);
@@ -28,14 +28,15 @@ case 'udp':
         exec($sh_cmd);
     }
     break;
-case 'rtsp':
-    $upd = array();
+case 'rtmp':
+    $upd = array('preset' => 'default');
     if(!empty($_REQUEST['device'])) $upd['device'] = trim($_REQUEST['device']);
     if(!empty($_REQUEST['ch'])) $upd['ch'] = trim($_REQUEST['ch']);
     if(empty($_REQUEST['b25'])) $upd['b25'] = FALSE;
     if(empty($_REQUEST['strip'])) $upd['strip'] = FALSE;
+    if(!empty($_REQUEST['preset'])) $upd['preset'] = trim($_REQUEST['preset']);
 
-    $sh_cmd = $pt1->buildForRTSP($upd);
+    $sh_cmd = $pt1->buildForRTMP($upd);
     $command[] = $sh_cmd;
     exec($sh_cmd);
     break;

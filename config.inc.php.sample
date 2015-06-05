@@ -7,9 +7,10 @@ define('TNST_LIB', TNST_ROOT . '/lib');
 define('EPGREC_PATH', '/var/www/ssl/epgrec');
 define('RECPT1_PATH', '/usr/local/bin/recpt1');
 define('RECPT1CTL_PATH', '/usr/local/bin/recpt1ctl');
-define('TSSERV_PATH', '/usr/local/bin/tsserv');
 
-define('URL_RTSP', 'rtmp://localhost:1935/tv/%s');
-define('URL_HLS', 'https://localhost/hls/%s.m3u');
-define('URL_DASH', 'https://localhost/dash/%s.mpd');
+define('URL_RTMP', 'rtmp://localhost:1935/tv/%s');
+define('URL_HLS', 'https://YOUR.HOSTNAME.EXAMPLE.COM/hls/%s/index.m3u8');
+define('URL_DASH', 'https://YOUR.HOSTNAME.EXAMPLE.COM/dash/%s/index.mpd');
+
+define('START_RTMP_SH', dirname(__FILE__) . "/start_rtmp.sh");
 

@@ -1,0 +1,48 @@
+rtmp {
+  server {
+    listen 1935;
+    chunk_size 4000;
+
+    application hls {
+      live on;
+      hls on;
+      hls_nested on;
+      hls_path /tmp/hls;
+    }
+    application dash {
+      live on;
+      dash on;
+      dash_nested on;
+      dash_path /tmp/dash;
+    }
+    application tv {
+      live on;
+
+      push rtmp://localhost:1935/hls;
+      push rtmp://localhost:1935/dash;
+    }
+  }
+}
+
+server {
+  listen  80 default_server;
+  server_name your.server.example.com;
+  root    /var/www/html;
+  index   index.php index.html index.htm;
+
+  location /hls {
+    types {
+      application/vnd.apple.mpegurl m3u8;
+      video/mp2t ts;
+    }
+    root /tmp;
+    add_header Access-Control-Allow-Origin *;
+    add_header Cache-Control no-cache;
+  }
+  location /dash {
+    root /tmp;
+    add_header Access-Control-Allow-Origin *;
+    add_header Cache-Control no-cache;
+  }
+}
+
